@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Stopwatch</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9f9f9;
+      flex-direction: column;
+      transition: all 0.5s ease;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #fff;
+      text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Stopwatch Container */
+    .stopwatch {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      width: 320px;
+      transition: transform 0.3s ease;
+    }
+
+    .stopwatch:hover {
+      transform: translateY(-8px);
+    }
+
+    /* Time Display */
+    .time {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 25px;
+      letter-spacing: 3px;
+      color: #00f0ff;
+      text-shadow: 0px 0px 15px rgba(0, 240, 255, 0.6);
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 25px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .start {
+      background: linear-gradient(135deg, #00c853, #00e676);
+      box-shadow: 0 4px 10px rgba(0, 200, 83, 0.4);
+    }
+
+    .stop {
+      background: linear-gradient(135deg, #d50000, #ff1744);
+      box-shadow: 0 4px 10px rgba(213, 0, 0, 0.4);
+    }
+
+    .reset {
+      background: linear-gradient(135deg, #ffab00, #ffd740);
+      color: #222;
+      box-shadow: 0 4px 10px rgba(255, 171, 0, 0.4);
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      color: #e0e0e0;
+    }
+
+    .footer span {
+      color: #00f0ff;
+      font-weight: 600;
+    }
+
+    @media (max-width: 400px) {
+      .stopwatch {
+        width: 90%;
+        padding: 30px;
+      }
+
+      .time {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Professional Stopwatch</h1>
+
+  <div class="stopwatch">
+    <div class="time" id="display">00:00:00</div>
+    <div class="buttons">
+      <button class="start" id="start">Start</button>
+      <button class="stop" id="stop">Stop</button>
+      <button class="reset" id="reset">Reset</button>
+    </div>
+  </div>
+
+  <div class="footer">Made with ❤️ by <span>Pallavi</span></div>
+
+  <script>
+    let startTime, updatedTime, difference, timerInterval;
+    let running = false;
+
+    const display = document.getElementById("display");
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const resetBtn = document.getElementById("reset");
+
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      return (
+        String(hours).padStart(2, "0") + ":" +
+        String(minutes).padStart(2, "0") + ":" +
+        String(seconds).padStart(2, "0")
+      );
+    }
+
+    function startTimer() {
+      if (!running) {
+        startTime = new Date().getTime() - (difference || 0);
+        timerInterval = setInterval(() => {
+          updatedTime = new Date().getTime();
+          difference = updatedTime - startTime;
+          display.textContent = formatTime(difference);
+        }, 1000);
+        running = true;
+      }
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      running = false;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      running = false;
+      difference = 0;
+      display.textContent = "00:00:00";
+    }
+
+    startBtn.addEventListener("click", startTimer);
+    stopBtn.addEventListener("click", stopTimer);
+    resetBtn.addEventListener("click", resetTimer);
+  </script>
+</body>
+</html>
